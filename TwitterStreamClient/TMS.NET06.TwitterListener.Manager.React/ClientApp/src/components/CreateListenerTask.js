@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText, Col, Badge } from 'reactstrap';
+import { Button, Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Label, Input, FormText, Row, Col, Badge } from 'reactstrap';
 
 export class CreateListenerTask extends Component {
     constructor(props) {
@@ -48,6 +48,26 @@ export class CreateListenerTask extends Component {
                                 </Badge>
                             )}
                         </Col>
+                    </FormGroup>
+                    <FormGroup>
+                        <Row>
+                            <Col sm={3}>
+                                <InputGroup>
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Start date</InputGroupText>
+                                    </InputGroupAddon>
+                                    <Input type="date" name="startDate" id="startDate" />
+                                </InputGroup>
+                            </Col>
+                            <Col sm={3}>
+                                <InputGroup>
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>End date</InputGroupText>
+                                    </InputGroupAddon>
+                                    <Input type="date"name="endDateGroup" id="endDateGroup" />
+                                </InputGroup>
+                            </Col>
+                        </Row>
                     </FormGroup>
                 </Form>
             </div>

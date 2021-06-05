@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TMS.NET06.TwitterListener.API" GeneratedClassName="TwitterClient">
+  <Profiles />
+  <Settings>
+    <Setting Name="ConsumerKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MQjBmN1zzAng3R8Q5aCHGCCpp</Value>
+    </Setting>
+    <Setting Name="ConsumerSecret" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">fS98OUpZ3xvk17OFm2Xwaj8gRafE0JJIdFZhxYVExPAVTlA9EQ</Value>
+    </Setting>
+    <Setting Name="AccessToken" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">1374825598669979653-aXCVwJGuHTYCYuK8rtF0UCroZX8ose</Value>
+    </Setting>
+    <Setting Name="AccessTokenSecret" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MlwpMCwmmEYWTjoR6oGioZqwkrtXG8CNvn98X2UcSsgEC</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
