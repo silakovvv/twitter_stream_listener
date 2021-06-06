@@ -33,11 +33,11 @@ namespace TMS.NET06.TwitterListener.API
         }
 
         /// <summary>
-        /// 
+        /// Get a list of tweets by listening a stream Twitter, leveraging package Twitterinvi.
         /// </summary>
-        /// <param name="options"></param>
-        /// <param name="endDate"></param>
-        /// <param name="mode"></param>
+        /// <param name="options">An array of filtering rules. The entire list of rules is available here: 'https://developer.twitter.com/en/docs/twitter-api/enterprise/search-api/overview'</param>
+        /// <param name="endDate">Date until which you want to listen to the stream.</param>
+        /// <param name="mode">Filtering mode (0 - all; 1 - any).</param>
         /// <returns></returns>
         public async Task<List<Tweet>> ListenStreamInRealTimeAsync(string[] options, DateTime endDate, int mode)
         {
@@ -76,11 +76,21 @@ namespace TMS.NET06.TwitterListener.API
             return Tweets;
         }
 
+        /// <summary>
+        /// Get a tweet as string in format JSON.
+        /// </summary>
+        /// <param name="tweet">Tweet.</param>
+        /// <returns></returns>
         public string GetTweetInFormatJSON(Tweet tweet)
         {
             return appClient.Json.Serialize(tweet);
         }
 
+        /// <summary>
+        /// Get a list of tweets as string in format JSON.
+        /// </summary>
+        /// <param name="tweets">A list of tweets.</param>
+        /// <returns></returns>
         public string GetTweetsInFormatJSON(List<Tweet> tweets)
         {
             return appClient.Json.Serialize(tweets);

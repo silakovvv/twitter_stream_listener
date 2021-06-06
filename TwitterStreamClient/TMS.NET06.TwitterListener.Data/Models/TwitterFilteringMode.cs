@@ -8,7 +8,7 @@ namespace TMS.NET06.TwitterListener.Data.Models
 {
     public enum TwitterFilteringMode
     {
-        Any,
-        All
+        All = 0,
+        Any = 1
     }
 }
