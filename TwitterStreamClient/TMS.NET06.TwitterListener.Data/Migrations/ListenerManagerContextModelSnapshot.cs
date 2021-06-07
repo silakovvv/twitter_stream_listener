@@ -83,6 +83,9 @@ namespace TMS.NET06.TwitterListener.Data.Migrations
                             b1.Property<string>("CronSchedule")
                                 .HasColumnType("nvarchar(max)");
 
+                            b1.Property<int>("Duration")
+                                .HasColumnType("int");
+
                             b1.Property<DateTime>("EndDate")
                                 .HasColumnType("datetime2");
 

@@ -10,7 +10,7 @@ using TMS.NET06.TwitterListener.Data;
 namespace TMS.NET06.TwitterListener.Data.Migrations
 {
     [DbContext(typeof(ListenerManagerContext))]
-    [Migration("20210605215836_InitialMigration")]
+    [Migration("20210607165753_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,6 +84,9 @@ namespace TMS.NET06.TwitterListener.Data.Migrations
 
                             b1.Property<string>("CronSchedule")
                                 .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("Duration")
+                                .HasColumnType("int");
 
                             b1.Property<DateTime>("EndDate")
                                 .HasColumnType("datetime2");

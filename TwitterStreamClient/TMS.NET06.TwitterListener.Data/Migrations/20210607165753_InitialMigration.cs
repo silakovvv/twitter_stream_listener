@@ -18,6 +18,7 @@ namespace TMS.NET06.TwitterListener.Data.Migrations
                     ListenerOptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TaskOptions_StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TaskOptions_EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TaskOptions_Duration = table.Column<int>(type: "int", nullable: true),
                     TaskOptions_CronSchedule = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
