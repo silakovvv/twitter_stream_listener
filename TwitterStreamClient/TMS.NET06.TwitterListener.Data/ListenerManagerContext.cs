@@ -17,6 +17,12 @@ namespace TMS.NET06.TwitterListener.Data
         {
         }
 
+        public ListenerManagerContext()
+        {
+            //_connectionString = @"Data Source=.\SQLExpress;Initial Catalog=ListenerManager;Integrated Security=True";
+            _connectionString = @"Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true";
+        }
+
         internal ListenerManagerContext(string connectionString)
         {
             _connectionString = connectionString;
@@ -24,7 +30,8 @@ namespace TMS.NET06.TwitterListener.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(this._connectionString);
+            optionsBuilder.UseSqlServer(
+                this._connectionString?? @"Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true");
             base.OnConfiguring(optionsBuilder);
         }
 
