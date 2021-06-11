@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TMS.NET06.TwitterListener.Data;
 
 namespace TMS.NET06.TwitterListener.Data.Migrations
 {
     [DbContext(typeof(ListenerManagerContext))]
-    partial class ListenerManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20210611111434_AddFieldProcessingDateInListenerResult")]
+    partial class AddFieldProcessingDateInListenerResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

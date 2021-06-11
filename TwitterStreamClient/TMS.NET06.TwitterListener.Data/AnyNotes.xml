@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<notes>
+	<add_migration>dotnet ef migrations add NameMigration --project ..\TMS.NET06.TwitterListener.Data -- Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true</add_migration>
+	<update_database>dotnet ef database update --context ListenerManagerContext -- Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true</update_database>
+</notes>

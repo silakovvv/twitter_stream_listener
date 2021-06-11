@@ -10,6 +10,7 @@ namespace TMS.NET06.TwitterListener.Data.Models
     public class ListenerResult
     {
         public int ResultId { get; set; }
+        public DateTime ProcessingDate { get; set;  }
         public ListenerTask Task { get; set; }
         public int TaskId { get; set; }
         public string ResultInFormatJSON { get; set; }

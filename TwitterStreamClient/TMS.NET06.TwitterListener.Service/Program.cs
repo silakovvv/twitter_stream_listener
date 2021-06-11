@@ -12,22 +12,8 @@ namespace TMS.NET06.TwitterListener.Service
     class Program
     {
         public static async Task Main(string[] args)
-        //public static void Main(string[] args)
         {
             await RunServiceCommandLine();
-
-            /*using (var listenerManagerContext = new ListenerManagerContext())
-            {
-                var listenerTask = listenerManagerContext.ListenerTasks
-                                                         .Where(to => to.TaskOptions.StartDate <= DateTime.Now && to.TaskOptions.EndDate >= DateTime.Now)
-                                                         .Where(t => t.Status != ListenerTaskStatus.Processing)
-                                                         .ToList();
-
-                foreach (var task in listenerTask)
-                {
-                    Console.WriteLine(task.Name);
-                }
-            }*/
         }
 
         public static async Task RunServiceCommandLine()

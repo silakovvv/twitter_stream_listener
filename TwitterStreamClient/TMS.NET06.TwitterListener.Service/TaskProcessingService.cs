@@ -12,7 +12,7 @@ namespace TMS.NET06.TwitterListener.Service
 {
     public class TaskProcessingService : IJob
     {
-
+        private DateTime _startDateCurrentProcess;
 
         public async Task Execute(IJobExecutionContext context)
         {
@@ -21,8 +21,8 @@ namespace TMS.NET06.TwitterListener.Service
             var schedulerContext = context.Scheduler.Context;
             var intervalInMinutes = (int)schedulerContext.Get("intervalInMinutes");
 
-            DateTime startDateCurrentProcess = DateTime.Now;
-            DateTime nextValidDate;
+            _startDateCurrentProcess = DateTime.Now;
+            DateTime? nextValidDate;
 
             using (var listenerManagerContext = new ListenerManagerContext())
             {
@@ -37,14 +37,13 @@ namespace TMS.NET06.TwitterListener.Service
                 {
                     nextValidDate = GetNextValidDate(listenerTask.TaskOptions.CronSchedule);
 
-                    if (nextValidDate == DateTime.MinValue || startDateCurrentProcess.AddMinutes(intervalInMinutes) < nextValidDate)
+                    if (!nextValidDate.HasValue || _startDateCurrentProcess > nextValidDate 
+                        || _startDateCurrentProcess.AddMinutes(intervalInMinutes) < nextValidDate)
                     {
                         continue;
                     }
-
-                    //await Console.Out.WriteLineAsync("Task in progress #" + listenerTask.TaskId.ToString());
                     
-                    StartTask(listenerTask, nextValidDate);
+                    StartTask(listenerTask, nextValidDate.Value);
                 }
             }
 
@@ -69,12 +68,18 @@ namespace TMS.NET06.TwitterListener.Service
             await scheduler.ScheduleJob(job, trigger);
         }
 
-        private DateTime GetNextValidDate(string expression)
+        private DateTime? GetNextValidDate(string expression)
         {
-            var CronExpression = new CronExpression(expression) { TimeZone = TimeZoneInfo.Utc };
-            var nextValidDateOffset = (DateTimeOffset)CronExpression.GetNextValidTimeAfter(DateTime.Now);
+            var CronExpression = new CronExpression(expression); // { TimeZone = TimeZoneInfo.Utc };
 
-            return nextValidDateOffset.DateTime;
+            var nextValidDate = CronExpression.GetNextValidTimeAfter(_startDateCurrentProcess.ToUniversalTime());
+
+            if (nextValidDate.HasValue)
+            {
+                return nextValidDate.Value.DateTime.ToLocalTime();
+            }
+
+            return null;
         }
     }
 }

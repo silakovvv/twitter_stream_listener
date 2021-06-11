@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Jobs\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TMS.NET06.TwitterListener.Data\TMS.NET06.TwitterListener.Data.csproj" />
   </ItemGroup>
 
