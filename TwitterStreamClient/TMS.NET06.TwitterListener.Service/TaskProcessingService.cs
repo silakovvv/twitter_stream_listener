@@ -54,7 +54,7 @@ namespace TMS.NET06.TwitterListener.Service
             IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             await scheduler.Start();
 
-            scheduler.Context.Put("listenerTask", listenerTask);
+            scheduler.Context.Put("TaskId", listenerTask.TaskId);
 
             IJobDetail job = JobBuilder.Create<ListenerTaskHandler>().Build();
 
