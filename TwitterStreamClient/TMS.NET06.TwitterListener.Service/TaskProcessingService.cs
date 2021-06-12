@@ -55,6 +55,7 @@ namespace TMS.NET06.TwitterListener.Service
             await scheduler.Start();
 
             scheduler.Context.Put("TaskId", listenerTask.TaskId);
+            scheduler.Context.Put("dueDate", dueDate);
 
             IJobDetail job = JobBuilder.Create<ListenerTaskHandler>().Build();
 
@@ -63,6 +64,7 @@ namespace TMS.NET06.TwitterListener.Service
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerName, "TasksGroup")
                 .StartAt(dueDate)
+                .EndAt(DateTime.Now.AddMinutes(listenerTask.TaskOptions.Duration + 5))
                 .Build();
 
             await scheduler.ScheduleJob(job, trigger);

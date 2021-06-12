@@ -62,11 +62,11 @@ namespace TMS.NET06.TwitterListener.API
 
             if (mode == 0)
             {
-                await twitterStream.StartMatchingAnyConditionAsync();
+                await twitterStream.StartMatchingAllConditionsAsync(); 
             }
             else if (mode == 1)
             {
-                await twitterStream.StartMatchingAllConditionsAsync();
+                await twitterStream.StartMatchingAnyConditionAsync();
             }
             else
             {

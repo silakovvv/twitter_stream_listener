@@ -16,6 +16,7 @@ namespace TMS.NET06.TwitterListener.Service
         {
             var schedulerContext = context.Scheduler.Context;
             var TaskId = (int)schedulerContext.Get("TaskId");
+            var dueDate = (DateTime)schedulerContext.Get("dueDate");
 
             await Console.Out.WriteLineAsync("Task in progress #" + TaskId.ToString());
 
@@ -33,6 +34,25 @@ namespace TMS.NET06.TwitterListener.Service
                                                     DateTime.Now.AddMinutes(listenerTask.TaskOptions.Duration),
                                                     (int)listenerTask.ListenerOptions.Mode);
 
+                if (tweets == null || tweets.Count == 0)
+                {
+                    listenerTask.Status = ListenerTaskStatus.Failed;
+                    listenerManagerContext.SaveChanges();
+                    return;
+                }
+
+                var listenerResult = new ListenerResult()
+                {
+                    TaskId = TaskId,
+                    ResultInFormatJSON = twitterListener.GetTweetsInFormatJSON(tweets),
+                    ProcessingDate = dueDate
+                };
+
+                listenerManagerContext.ListenerResults.Add(listenerResult);
+
+                listenerTask.Status = ListenerTaskStatus.Succeeded;
+                listenerManagerContext.SaveChanges();
+
                 //listenerTask.ListenerOptions = new ListenerOptions() {
                 //    FilterRules = new string[]
                 //    {
@@ -41,13 +61,7 @@ namespace TMS.NET06.TwitterListener.Service
                 //    },
                 //    Mode = TwitterFilteringMode.All
                 //};
-
-
             }
-
-            //var tweets = await twitterListener.ListenStreamInRealTimeAsync(filterRules, DateTime.Now.AddSeconds(10), 1);
-
-            //await Console.Out.WriteLineAsync(twitterListener.GetTweetsInFormatJSON(tweets));
         }
     }
 }
