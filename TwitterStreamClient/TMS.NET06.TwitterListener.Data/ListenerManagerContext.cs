@@ -19,11 +19,10 @@ namespace TMS.NET06.TwitterListener.Data
 
         public ListenerManagerContext()
         {
-            //_connectionString = @"Data Source=.\SQLExpress;Initial Catalog=ListenerManager;Integrated Security=True";
-            _connectionString = @"Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true";
+            _connectionString = DataSettings.Default.ListenerManagerConnection;
         }
 
-        internal ListenerManagerContext(string connectionString)
+        public ListenerManagerContext(string connectionString)
         {
             _connectionString = connectionString;
         }

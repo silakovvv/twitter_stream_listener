@@ -27,7 +27,7 @@ namespace TMS.NET06.TwitterListener.Service
             using (var listenerManagerContext = new ListenerManagerContext())
             {
                 var listenerTasks = listenerManagerContext.ListenerTasks
-                                                         .Where(to => to.TaskOptions.StartDate <= DateTime.Now && to.TaskOptions.EndDate >= DateTime.Now)
+                                                         .Where(to => to.TaskOptions.StartDate <= _startDateCurrentProcess && to.TaskOptions.EndDate >= _startDateCurrentProcess)
                                                          .Where(t => t.Status != ListenerTaskStatus.Processing)
                                                          .ToList();              
                 
@@ -37,8 +37,20 @@ namespace TMS.NET06.TwitterListener.Service
                 {
                     nextValidDate = GetNextValidDate(listenerTask.TaskOptions.CronSchedule);
 
-                    if (!nextValidDate.HasValue || _startDateCurrentProcess > nextValidDate 
-                        || _startDateCurrentProcess.AddMinutes(intervalInMinutes) < nextValidDate)
+                    DateTime lastDateListening;
+                    try {
+                        lastDateListening = listenerManagerContext.ListenerResults
+                                                                  .Where(r => r.TaskId == listenerTask.TaskId)
+                                                                  .OrderByDescending(r => r.ProcessingDate)
+                                                                  .First().ProcessingDate;
+                    }
+                    catch {
+                        lastDateListening = DateTime.MinValue;
+                    }
+
+
+                    if (!nextValidDate.HasValue || lastDateListening == nextValidDate
+                        || _startDateCurrentProcess > nextValidDate || _startDateCurrentProcess.AddMinutes(intervalInMinutes) < nextValidDate)
                     {
                         continue;
                     }

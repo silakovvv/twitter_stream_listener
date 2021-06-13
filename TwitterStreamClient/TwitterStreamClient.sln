@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMS.NET06.TwitterListener.Manager.React", "TMS.NET06.TwitterListener.Manager.React\TMS.NET06.TwitterListener.Manager.React.csproj", "{92499A9F-7BF6-4A07-9163-B2EEB55E7D26}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3CE22DE1-D9DA-4206-B0D7-AC2165F32E40} = {3CE22DE1-D9DA-4206-B0D7-AC2165F32E40}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMS.NET06.TwitterListener.API", "TMS.NET06.TwitterListener.API\TMS.NET06.TwitterListener.API.csproj", "{8915ED0D-179B-452A-A8D6-A7713AD2E4F9}"
 EndProject

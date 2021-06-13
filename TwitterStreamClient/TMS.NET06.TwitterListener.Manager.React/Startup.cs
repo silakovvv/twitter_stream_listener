@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TMS.NET06.TwitterListener.Data;
 using TMS.NET06.TwitterListener.Manager.React.Data;
 
 namespace TMS.NET06.TwitterListener.Manager.React
@@ -33,6 +34,8 @@ namespace TMS.NET06.TwitterListener.Manager.React
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddTransient<IListenerTaskRepository, ListenerTaskRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
