@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { Button, Container, Col, Form, FormGroup, Input, InputGroup, InputGroupAddon, Row, Table } from 'reactstrap';
 import Moment from 'moment';
+import { Pagination } from './Pagination';
 
 export class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loadingTasks: true, listenerTasks: [], taskStatusesMatching: {}, isSearchingTasks: false
+            loadingTasks: true,
+            listenerTasks: [],
+            taskStatusesMatching: {},
+            isSearchingTasks: false,
+            currentPage: 1,
+            taskPerPage: 2,
+            tasksCount: null,
         };
     }
 
@@ -77,6 +84,8 @@ export class Home extends Component {
     }
 
     render() {
+        const paginate = pageNum => { this.populateListenerTasks() };
+
         let tableListenerTasks = Home.renderListenerTasksTable(
             { listenerTasks: this.state.listenerTasks, taskStatusesMatching: this.state.taskStatusesMatching },
             this.state.loadingTasks
@@ -107,6 +116,12 @@ export class Home extends Component {
                             <Row>
                                 {tableListenerTasks}
                             </Row>
+                            <Row>
+                                <Col>
+                                    <Pagination infoPerPage={this.state.taskPerPage}
+                                        totalInfo={this.state.patientsCount} paginate={paginate} currentPage={this.state.currentPage} />
+                                </Col>
+                            </Row>
                         </div>
                     </Col>
                 </Row>
@@ -119,7 +134,7 @@ export class Home extends Component {
             ? 'listenerTask'
             : 'listenerTask/FilteredListenerTasks?search=' + searchText;
 
-        const response = await fetch(requestText, {
+        const response = await fetch('listenerTask?search=' + searchText, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -127,7 +142,9 @@ export class Home extends Component {
             }
         });
         const data = await response.json();
-        this.setState({ listenerTasks: data, loadingTasks: false });
+        this.setState({ listenerTasks: data, loadingTasks: false, tasksCount: 3 });
+
+        console.log(data.length);
     }
 
     async populateTaskStatusesMatching() {

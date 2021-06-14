@@ -5,7 +5,6 @@ import { Home } from './components/Home';
 import { CreateListenerTask } from './components/CreateListenerTask';
 
 import './custom.css'
-import 'fontsource-roboto';
 
 export default class App extends Component {
   static displayName = App.name;
