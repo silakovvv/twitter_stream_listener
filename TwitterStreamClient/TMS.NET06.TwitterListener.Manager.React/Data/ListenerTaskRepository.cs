@@ -33,7 +33,7 @@ namespace TMS.NET06.TwitterListener.Manager.React.Data
         {
             await using var context = CreateContext();
             return await context.ListenerTasks
-                                .Where(t => t.Name.Contains(searchText))
+                                .Where(t => t.Name.Contains(searchText) || t.ListenerOptions.FilterRules.Contains(searchText))
                                 .ToListAsync();
         }
 

@@ -25,16 +25,17 @@ namespace TMS.NET06.TwitterListener.Manager.React.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ListenerTask>> GetAsync(string search)
+        public async Task<IEnumerable<ListenerTask>> GetAsync(string searchText)
         {
-            return await _listenerTaskRepository.GetListenersTaskAsync();
+            if (searchText != null && searchText != "undefine")
+            {
+                return await _listenerTaskRepository.GetFilteredListenersTasAsync(searchText);
+            }
+            else
+            {
+                return await _listenerTaskRepository.GetListenersTaskAsync();
+            }
         }
-
-        //[HttpGet("{search}")]
-        //public async Task<IEnumerable<ListenerTask>> GetFilteredListenerTasksAsync(string search)
-        //{
-        //    return await _listenerTaskRepository.GetFilteredListenersTasAsync(search);
-        //}
 
         [HttpPost]
         [Route("[action]")]

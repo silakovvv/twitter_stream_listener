@@ -10,7 +10,6 @@ export class Home extends Component {
             loadingTasks: true,
             listenerTasks: [],
             taskStatusesMatching: {},
-            isSearchingTasks: false,
             currentPage: 1,
             taskPerPage: 2,
             tasksCount: null,
@@ -74,13 +73,11 @@ export class Home extends Component {
     handleSearchStringsInput(evt) {
         if (evt.charCode == 13) {
             this.populateListenerTasks(evt.target.value);
-            this.setState({ isSearchingTasks: evt.target.value == '' ? false : true });
         }
     }
 
     handleSearch(searchText) {
         this.populateListenerTasks(searchText);
-        this.setState({ isSearchingTasks: searchText == '' ? false : true });
     }
 
     render() {
@@ -130,11 +127,12 @@ export class Home extends Component {
     }
 
     async populateListenerTasks(searchText) {
-        const requestText = (typeof searchText === 'undefined') || searchText == ''
-            ? 'listenerTask'
-            : 'listenerTask/FilteredListenerTasks?search=' + searchText;
 
-        const response = await fetch('listenerTask?search=' + searchText, {
+        console.log('listenerTask?search=' + encodeURIComponent(searchText));
+
+        const response = await fetch('listenerTask?', new URLSearchParams({
+            search: searchText
+        }), {//search=' + encodeURIComponent(searchText), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -142,9 +140,8 @@ export class Home extends Component {
             }
         });
         const data = await response.json();
-        this.setState({ listenerTasks: data, loadingTasks: false, tasksCount: 3 });
 
-        console.log(data.length);
+        this.setState({ listenerTasks: data, loadingTasks: false, tasksCount: data.length });
     }
 
     async populateTaskStatusesMatching() {
