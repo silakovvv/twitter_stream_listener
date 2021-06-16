@@ -28,10 +28,10 @@ export class Home extends Component {
                     <tr>
                         <th className="text-center">#</th>
                         <th className="text-center">Name</th>
-                        <th className="text-center">Status</th>
-                        <th className="text-center">Start date</th>
-                        <th className="text-center">End date</th>
+                        <th className="text-center">Filter rules</th>
+                        <th className="text-center">Period</th>
                         <th className="text-center">Duration (min.)</th>
+                        <th className="text-center">Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -52,11 +52,19 @@ export class Home extends Component {
                         data.listenerTasks.map(task =>
                         <tr key={task.taskId}>
                             <th scope="row">{task.taskId}</th>
-                            <td>{task.name}</td>
-                            <td>{data.taskStatusesMatching[task.status]}</td>
-                            <td>{Moment(task.taskOptions.startDate).format('d.MM.yyyy h:mm:ss a')}</td>
-                            <td>{Moment(task.taskOptions.endDate).format('d.MM.yyyy h:mm:ss a')}</td>
+                                <td>{task.name}</td>
+                                <td>{task.listenerOptions.filterRules.length
+                                    ? task.listenerOptions.filterRules.toString() : ''}</td>
+                            <td>
+                                <Row>
+                                    {Moment(task.taskOptions.startDate).format('d.MM.yyyy h:mm:ss a')}
+                                </Row>
+                                <Row>
+                                    - {Moment(task.taskOptions.endDate).format('d.MM.yyyy h:mm:ss a')}
+                                </Row>
+                            </td>
                             <td className="text-center">{task.taskOptions.duration}</td>
+                            <td>{data.taskStatusesMatching[task.status]}</td>
                             <td>
                                 <Row>
                                     <Button color="primary">edit</Button>
@@ -80,6 +88,12 @@ export class Home extends Component {
         this.populateListenerTasks(searchText);
     }
 
+    clearSearchResults(evt) {
+        if (!evt.target.value) {
+            this.populateListenerTasks();
+        }
+    }
+
     render() {
         const paginate = pageNum => { this.populateListenerTasks() };
 
@@ -101,9 +115,19 @@ export class Home extends Component {
                                     <Form>
                                         <FormGroup>
                                             <InputGroup>
-                                                <Input name="searchText" id="searchText" placeholder="Search for a task by name..." onKeyPress={(evt) => this.handleSearchStringsInput(evt)} />
+                                                <Input
+                                                    name="searchText"
+                                                    id="searchText"
+                                                    placeholder="Search for a task by name..."
+                                                    onKeyPress={(evt) => { evt.preventDefault(); this.handleSearchStringsInput(evt) }}
+                                                    onChange={(evt) => { evt.preventDefault(); this.clearSearchResults(evt) }}
+                                                />
                                                 <InputGroupAddon addonType="append">
-                                                    <Button color="primary" onClick={(evt) => { evt.preventDefault(); this.handleSearch(document.getElementById("searchText").value); }}>Search</Button>
+                                                    <Button
+                                                        color="primary"
+                                                        onClick={(evt) => { evt.preventDefault(); this.handleSearch(document.getElementById("searchText").value); }}>
+                                                        Search
+                                                    </Button>
                                                 </InputGroupAddon>
                                             </InputGroup>
                                         </FormGroup>
@@ -127,12 +151,8 @@ export class Home extends Component {
     }
 
     async populateListenerTasks(searchText) {
-
-        console.log('listenerTask?search=' + encodeURIComponent(searchText));
-
-        const response = await fetch('listenerTask?', new URLSearchParams({
-            search: searchText
-        }), {//search=' + encodeURIComponent(searchText), {
+        const request = 'listenerTask?searchText=' + encodeURIComponent(searchText);
+        const response = await fetch(request, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -140,8 +160,8 @@ export class Home extends Component {
             }
         });
         const data = await response.json();
-
         this.setState({ listenerTasks: data, loadingTasks: false, tasksCount: data.length });
+        console.log(data[2].listenerOptions.filterRules.toString());
     }
 
     async populateTaskStatusesMatching() {
