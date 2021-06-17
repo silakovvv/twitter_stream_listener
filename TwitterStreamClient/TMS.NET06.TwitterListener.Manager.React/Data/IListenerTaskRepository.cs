@@ -8,8 +8,8 @@ namespace TMS.NET06.TwitterListener.Manager.React.Data
 {
     public interface IListenerTaskRepository
     {
-        Task<IEnumerable<ListenerTask>> GetListenersTaskAsync();
-        Task<IEnumerable<ListenerTask>> GetFilteredListenersTasAsync(string searchText);
+        Task<IEnumerable<ListenerTask>> GetListenersTaskAsync(int currentPage, int taskPerPage);
+        Task<IEnumerable<ListenerTask>> GetFilteredListenersTasAsync(int currentPage, int taskPerPage, string searchText);
         Task<Dictionary<int, string>> GetTaskStatusesMatching();
     }
 }

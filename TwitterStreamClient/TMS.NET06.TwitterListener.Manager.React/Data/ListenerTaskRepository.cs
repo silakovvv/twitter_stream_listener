@@ -23,19 +23,21 @@ namespace TMS.NET06.TwitterListener.Manager.React.Data
             return new ListenerManagerContext(_configuration.GetConnectionString("ListenerManagerConnection"));
         }
 
-        public async Task<IEnumerable<ListenerTask>> GetListenersTaskAsync()
+        public async Task<IEnumerable<ListenerTask>> GetListenersTaskAsync(int currentPage, int taskPerPage)
         {
             await using var context = CreateContext();
-            return await context.ListenerTasks.ToListAsync();
+            return await context.ListenerTasks.OrderBy(t => t.TaskId)
+                                              .Skip((currentPage - 1) * taskPerPage)
+                                              .ToListAsync();
         }
 
-        public async Task<IEnumerable<ListenerTask>> GetFilteredListenersTasAsync(string searchText)
+        public async Task<IEnumerable<ListenerTask>> GetFilteredListenersTasAsync(int currentPage, int taskPerPage, string searchText)
         {
             await using var context = CreateContext();
             return await context.ListenerTasks
-                                //.OrderBy(w => w.Name)
-                                //.Skip((page - 1) * itemsPerPage)
                                 .Where(t => t.Name.Contains(searchText)) //|| t.ListenerOptions.FilterRules.Contains(searchText)
+                                .OrderBy(t => t.TaskId)
+                                .Skip((currentPage - 1) * taskPerPage)
                                 .ToListAsync();
         }
 

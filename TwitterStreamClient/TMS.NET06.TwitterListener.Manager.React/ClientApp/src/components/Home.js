@@ -151,8 +151,18 @@ export class Home extends Component {
     }
 
     async populateListenerTasks(searchText) {
-        const request = 'listenerTask?searchText=' + encodeURIComponent(searchText);
-        const response = await fetch(request, {
+        const params = {
+            'currentPage': this.state.currentPage,
+            'taskPerPage': this.state.taskPerPage,
+            'searchText': searchText
+        };
+
+        let query = 'listenerTask?' + Object.keys(params)
+                                            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+                                            .join('&');
+        console.log(query);
+
+        const response = await fetch(query, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -161,7 +171,6 @@ export class Home extends Component {
         });
         const data = await response.json();
         this.setState({ listenerTasks: data, loadingTasks: false, tasksCount: data.length });
-        console.log(data[2].listenerOptions.filterRules.toString());
     }
 
     async populateTaskStatusesMatching() {
