@@ -1,10 +1,14 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Label, Input, FormText, Row, Col, Badge } from 'reactstrap';
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 export class CreateListenerTask extends Component {
     constructor(props) {
         super(props);
         this.state = { rules: [] };
+
+        this.TaskId = 1;
     }
 
     handleRulesInput(evt) {        
@@ -25,7 +29,16 @@ export class CreateListenerTask extends Component {
     render() {
         return (
             <div>
-                <h1>Create Listener Task</h1>
+                <Row>
+                    <Col sm={6}>
+                        <h1>Listener Task #{this.TaskId}</h1>
+                    </Col>
+                    <Col sm={6}>
+                        <div className="text-right">
+                            <Button color="success" style={{ padding: 10 }}>Save</Button>
+                        </div>
+                    </Col>
+                </Row>
                 <Form>
                     <FormGroup>
                         <Label for="taskName" sm="2">Name</Label>
@@ -57,6 +70,15 @@ export class CreateListenerTask extends Component {
                                         <InputGroupText>Start date</InputGroupText>
                                     </InputGroupAddon>
                                     <Input type="date" name="startDate" id="startDate" />
+                                </InputGroup>
+                                <InputGroup>
+                                    <DatePicker
+                                        selected={new Date()}
+                                        /*onChange={(date) => setStartDate(date)}*/
+                                        timeInputLabel="Time:"
+                                        dateFormat="MM/dd/yyyy h:mm aa"
+                                        showTimeInput
+                                    />
                                 </InputGroup>
                             </Col>
                             <Col sm={3}>

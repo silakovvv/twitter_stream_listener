@@ -29,7 +29,7 @@ namespace TMS.NET06.TwitterListener.Manager.React.Controllers
         {
             if (searchText != null && searchText != "undefined")
             {
-                return await _listenerTaskRepository.GetFilteredListenersTasAsync(currentPage, taskPerPage, searchText);
+                return await _listenerTaskRepository.GetFilteredListenersTaskAsync(currentPage, taskPerPage, searchText);
             }
             else
             {
@@ -42,6 +42,12 @@ namespace TMS.NET06.TwitterListener.Manager.React.Controllers
         public async Task<Dictionary<int, string>> TaskStatusesMatchingAsync()
         {
             return await _listenerTaskRepository.GetTaskStatusesMatching();
+        }
+
+        [HttpGet("count")]
+        public async Task<int> GetCountTasksAsync(string searchText)
+        {
+            return await _listenerTaskRepository.GetCountTasksAsync(searchText);
         }
     }
 }

@@ -10,10 +10,11 @@ export class Home extends Component {
             loadingTasks: true,
             listenerTasks: [],
             taskStatusesMatching: {},
-            currentPage: 1,
             taskPerPage: 2,
             tasksCount: null,
         };
+
+        this.currentPage = 1; 
     }
 
     componentDidMount() {
@@ -67,8 +68,8 @@ export class Home extends Component {
                             <td>{data.taskStatusesMatching[task.status]}</td>
                             <td>
                                 <Row>
-                                    <Button color="primary">edit</Button>
-                                    <Button color="danger">delete</Button>
+                                    <Button color="primary" style={{ margin: 2 }}>edit</Button>
+                                    <Button color="danger" style={{ margin: 2 }}>delete</Button>
                                 </Row>
                             </td>
                         </tr>
@@ -80,6 +81,7 @@ export class Home extends Component {
 
     handleSearchStringsInput(evt) {
         if (evt.charCode == 13) {
+            this.currentPage = 1;
             this.populateListenerTasks(evt.target.value);
         }
     }
@@ -90,12 +92,16 @@ export class Home extends Component {
 
     clearSearchResults(evt) {
         if (!evt.target.value) {
+            this.currentPage = 1;
             this.populateListenerTasks();
         }
     }
 
     render() {
-        const paginate = pageNum => { this.populateListenerTasks() };
+        const paginate = (pageNum) => {
+            this.currentPage = pageNum;
+            this.populateListenerTasks(document.getElementById("searchText").value);
+        }
 
         let tableListenerTasks = Home.renderListenerTasksTable(
             { listenerTasks: this.state.listenerTasks, taskStatusesMatching: this.state.taskStatusesMatching },
@@ -105,11 +111,18 @@ export class Home extends Component {
         return (
             <Container>
                 <Row>
-                    <h1 id="tabelLabel">Listener tasks</h1>
+                    <Col sm={6}>
+                        <h1 id="tabelLabel">Listener Tasks</h1>
+                    </Col>
+                    <Col sm={6}>
+                        <div className="text-right">
+                            <Button color="success" style={{ padding: 10 }}>New Task</Button>
+                        </div>
+                    </Col>
                 </Row>
                 <Row>
                     <Col sm={12}>
-                        <div>
+                        <div style={{ marginTop: 15 }}>
                             <Row>
                                 <Col sm={12}>
                                     <Form>
@@ -119,8 +132,8 @@ export class Home extends Component {
                                                     name="searchText"
                                                     id="searchText"
                                                     placeholder="Search for a task by name..."
-                                                    onKeyPress={(evt) => { evt.preventDefault(); this.handleSearchStringsInput(evt) }}
-                                                    onChange={(evt) => { evt.preventDefault(); this.clearSearchResults(evt) }}
+                                                    /*onKeyPress={(evt) => { this.handleSearchStringsInput(evt); evt.preventDefault(); }}*/
+                                                    onChange={(evt) => this.clearSearchResults(evt) }
                                                 />
                                                 <InputGroupAddon addonType="append">
                                                     <Button
@@ -138,10 +151,16 @@ export class Home extends Component {
                                 {tableListenerTasks}
                             </Row>
                             <Row>
-                                <Col>
-                                    <Pagination infoPerPage={this.state.taskPerPage}
-                                        totalInfo={this.state.patientsCount} paginate={paginate} currentPage={this.state.currentPage} />
-                                </Col>
+                                {!(this.state.listenerTasks.length === 0) && !this.state.loadingTasks && !!this.state.tasksCount && (
+                                    <Col>
+                                        <Pagination
+                                            totalCount={this.state.tasksCount}
+                                            perPage={this.state.taskPerPage}
+                                            paginate={paginate}
+                                            currentPage={this.currentPage}
+                                        />
+                                    </Col>
+                                )}
                             </Row>
                         </div>
                     </Col>
@@ -152,7 +171,7 @@ export class Home extends Component {
 
     async populateListenerTasks(searchText) {
         const params = {
-            'currentPage': this.state.currentPage,
+            'currentPage': this.currentPage,
             'taskPerPage': this.state.taskPerPage,
             'searchText': searchText
         };
@@ -160,7 +179,6 @@ export class Home extends Component {
         let query = 'listenerTask?' + Object.keys(params)
                                             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
                                             .join('&');
-        console.log(query);
 
         const response = await fetch(query, {
             method: 'GET',
@@ -170,7 +188,23 @@ export class Home extends Component {
             }
         });
         const data = await response.json();
-        this.setState({ listenerTasks: data, loadingTasks: false, tasksCount: data.length });
+        this.setState({ listenerTasks: data, loadingTasks: false });
+
+        this.populateCountTasks(searchText);
+    }
+
+    async populateCountTasks(searchText) {
+        let query = 'listenerTask/count?searchText=' + encodeURIComponent(searchText);
+
+        const response = await fetch(query, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        this.setState({ tasksCount: data });
     }
 
     async populateTaskStatusesMatching() {

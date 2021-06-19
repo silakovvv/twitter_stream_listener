@@ -28,17 +28,37 @@ namespace TMS.NET06.TwitterListener.Manager.React.Data
             await using var context = CreateContext();
             return await context.ListenerTasks.OrderBy(t => t.TaskId)
                                               .Skip((currentPage - 1) * taskPerPage)
+                                              .Take(taskPerPage)
                                               .ToListAsync();
         }
 
-        public async Task<IEnumerable<ListenerTask>> GetFilteredListenersTasAsync(int currentPage, int taskPerPage, string searchText)
+        public async Task<IEnumerable<ListenerTask>> GetFilteredListenersTaskAsync(int currentPage, int taskPerPage, string searchText)
         {
             await using var context = CreateContext();
             return await context.ListenerTasks
                                 .Where(t => t.Name.Contains(searchText)) //|| t.ListenerOptions.FilterRules.Contains(searchText)
                                 .OrderBy(t => t.TaskId)
                                 .Skip((currentPage - 1) * taskPerPage)
+                                .Take(taskPerPage)
                                 .ToListAsync();
+        }
+
+        public async Task<int> GetCountTasksAsync(string searchText)
+        {
+            int count = 0;
+
+            await using var context = CreateContext();
+
+            if (searchText != null && searchText != "undefined")
+            {
+                count = context.ListenerTasks.Count(t => t.Name.Contains(searchText));
+            }
+            else
+            {
+                count = context.ListenerTasks.Count();
+            }
+
+            return count;
         }
 
         public async Task<Dictionary<int, string>> GetTaskStatusesMatching()
