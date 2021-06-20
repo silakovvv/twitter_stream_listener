@@ -49,5 +49,23 @@ namespace TMS.NET06.TwitterListener.Manager.React.Controllers
         {
             return await _listenerTaskRepository.GetCountTasksAsync(searchText);
         }
+
+        [HttpGet("task")]
+        public async Task<ListenerTask> GetListenerTasksAsync(int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+
+            return await _listenerTaskRepository.GetListenerTasksAsync(id);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<bool> SaveTaskAsync([FromBody] ListenerTask listenerTask)
+        {
+            return await _listenerTaskRepository.SaveListenerTasksAsync(listenerTask);
+        }
     }
 }

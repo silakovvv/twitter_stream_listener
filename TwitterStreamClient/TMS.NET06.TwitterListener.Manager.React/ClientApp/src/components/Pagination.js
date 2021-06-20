@@ -15,7 +15,6 @@ export class Pagination extends Component {
 
         const handlePrevClick = (evt) => {
             evt.preventDefault();
-            console.log({ "currentPage": currentPage - 1, "totalPage": totalPage, "if": currentPage - 1 == 0 });
             if (currentPage - 1 > 0) {
                 paginate(currentPage - 1);
             }
@@ -35,7 +34,7 @@ export class Pagination extends Component {
                         <a  className="page-link"
                             onClick={handlePrevClick}
                             href="/">
-                            &lt;&lt;
+                            &lt;
                         </a>
                     </li>
                     {pageNumbers.map(num => (
@@ -51,7 +50,7 @@ export class Pagination extends Component {
                         <a  className="page-link"
                             onClick={handleNextClick}
                             href="/">
-                            &gt;&gt;
+                            &gt;
                         </a>
                     </li>
                 </ul>

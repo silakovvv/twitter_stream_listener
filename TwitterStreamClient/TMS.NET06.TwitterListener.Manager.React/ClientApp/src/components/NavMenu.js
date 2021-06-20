@@ -28,16 +28,17 @@ export class NavMenu extends Component {
           <Container>
             <NavbarBrand tag={Link} to="/">Twitter listener manager</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
-              <ul className="navbar-nav flex-grow">
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/create-task">Create task</NavLink>
-                </NavItem>
-              </ul>
-            </Collapse>
+            {false && (
+                <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
+                  <ul className="navbar-nav flex-grow">
+                    <NavItem>
+                      <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink tag={Link} className="text-dark" to="/create-task">Create task</NavLink>
+                    </NavItem>
+                  </ul>
+                </Collapse>)}
           </Container>
         </Navbar>
       </header>

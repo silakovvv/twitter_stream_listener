@@ -1,7 +1,11 @@
-import React, { Component } from 'react';
-import { Button, Container, Col, Form, FormGroup, Input, InputGroup, InputGroupAddon, Row, Table } from 'reactstrap';
+import React, { Component, useState } from 'react';
+import {
+    Container, Col, Row, Form, FormGroup, Input, InputGroup, InputGroupAddon,
+    Button, Table, Modal, ModalHeader, ModalBody, ModalFooter
+} from 'reactstrap';
 import Moment from 'moment';
 import { Pagination } from './Pagination';
+import { CreateListenerTask } from './CreateListenerTask';
 
 export class Home extends Component {
     constructor(props) {
@@ -10,8 +14,11 @@ export class Home extends Component {
             loadingTasks: true,
             listenerTasks: [],
             taskStatusesMatching: {},
-            taskPerPage: 2,
+            taskPerPage: 8,
             tasksCount: null,
+            openModalDeletingTask: false,
+            createTask: false,
+            selectedTask: 0
         };
 
         this.currentPage = 1; 
@@ -20,63 +27,6 @@ export class Home extends Component {
     componentDidMount() {
         this.populateTaskStatusesMatching();
         this.populateListenerTasks();
-    }
-
-    static renderListenerTasksTable(data, loading) {
-        return (
-            <Table className='table table-striped' aria-labelledby="tabelLabel">
-                <thead>
-                    <tr>
-                        <th className="text-center">#</th>
-                        <th className="text-center">Name</th>
-                        <th className="text-center">Filter rules</th>
-                        <th className="text-center">Period</th>
-                        <th className="text-center">Duration (min.)</th>
-                        <th className="text-center">Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {!data.listenerTasks.length && !loading && (
-                        <tr className="text-center">
-                            <td colSpan={9}>No tasks</td>
-                        </tr>
-                    )}
-                    {loading && (
-                        <tr className="text-center">
-                            <td colSpan={9}>
-                                <span>Loading...</span>
-                            </td>
-                        </tr>
-                    )}
-                    {!loading &&
-                        data.listenerTasks.map(task =>
-                        <tr key={task.taskId}>
-                            <th scope="row">{task.taskId}</th>
-                                <td>{task.name}</td>
-                                <td>{task.listenerOptions.filterRules.length
-                                    ? task.listenerOptions.filterRules.toString() : ''}</td>
-                            <td>
-                                <Row>
-                                    {Moment(task.taskOptions.startDate).format('d.MM.yyyy h:mm:ss a')}
-                                </Row>
-                                <Row>
-                                    - {Moment(task.taskOptions.endDate).format('d.MM.yyyy h:mm:ss a')}
-                                </Row>
-                            </td>
-                            <td className="text-center">{task.taskOptions.duration}</td>
-                            <td>{data.taskStatusesMatching[task.status]}</td>
-                            <td>
-                                <Row>
-                                    <Button color="primary" style={{ margin: 2 }}>edit</Button>
-                                    <Button color="danger" style={{ margin: 2 }}>delete</Button>
-                                </Row>
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </Table>
-        );
     }
 
     handleSearchStringsInput(evt) {
@@ -97,16 +47,22 @@ export class Home extends Component {
         }
     }
 
+    saveTask = () => {
+        this.setState({ createTask: false, selectedTask: 0 });
+        this.populateListenerTasks();
+    }
+
     render() {
+        if (this.state.createTask) {
+            return (
+                <CreateListenerTask saveTask={this.saveTask} taskId={this.state.selectedTask}/>
+            );
+        }
+
         const paginate = (pageNum) => {
             this.currentPage = pageNum;
             this.populateListenerTasks(document.getElementById("searchText").value);
         }
-
-        let tableListenerTasks = Home.renderListenerTasksTable(
-            { listenerTasks: this.state.listenerTasks, taskStatusesMatching: this.state.taskStatusesMatching },
-            this.state.loadingTasks
-        ); 
 
         return (
             <Container>
@@ -116,9 +72,28 @@ export class Home extends Component {
                     </Col>
                     <Col sm={6}>
                         <div className="text-right">
-                            <Button color="success" style={{ padding: 10 }}>New Task</Button>
+                            <Button
+                                color="success" style={{ padding: 10 }}
+                                onClick={(evt) => {
+                                    evt.preventDefault();
+                                    this.setState({ createTask: true, selectedTask: 0 });
+                                }}>New Task</Button>
                         </div>
                     </Col>
+                </Row>
+                <Row>
+                    <Modal isOpen={this.state.openModalDeletingTask}>
+                        <ModalHeader>Delete task?</ModalHeader>
+                        <ModalBody>
+                            Don't delete anything yet, please.
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="secondary" onClick={(evt) => {
+                                evt.preventDefault();
+                                this.setState({ openModalDeletingTask: false });
+                            }}>Welldone... :/</Button>
+                        </ModalFooter>
+                    </Modal>
                 </Row>
                 <Row>
                     <Col sm={12}>
@@ -148,7 +123,66 @@ export class Home extends Component {
                                 </Col>
                             </Row>
                             <Row>
-                                {tableListenerTasks}
+                                <Table className='table table-striped' aria-labelledby="tabelLabel">
+                                    <thead>
+                                        <tr>
+                                            <th className="text-center">#</th>
+                                            <th className="text-center">Name</th>
+                                            <th className="text-center">Filter rules</th>
+                                            <th className="text-center">Period</th>
+                                            <th className="text-center">Duration (min.)</th>
+                                            <th className="text-center">Status</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {!this.state.listenerTasks.length && !this.state.loading && (
+                                            <tr className="text-center">
+                                                <td colSpan={9}>No tasks</td>
+                                            </tr>
+                                        )}
+                                        {this.state.loading && (
+                                            <tr className="text-center">
+                                                <td colSpan={9}>
+                                                    <span>Loading...</span>
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {!this.state.loading &&
+                                            this.state.listenerTasks.map(task =>
+                                                <tr key={task.taskId}>
+                                                    <th scope="row">{task.taskId}</th>
+                                                    <td>{task.name}</td>
+                                                    <td className="col-sm-2">{task.listenerOptions.filterRules.length
+                                                        ? task.listenerOptions.filterRules.toString() : ''}</td>
+                                                    <td>
+                                                        <Row>
+                                                            {Moment(task.taskOptions.startDate).format('d.MM.yyyy h:mm:ss a')}
+                                                        </Row>
+                                                        <Row>
+                                                            - {Moment(task.taskOptions.endDate).format('d.MM.yyyy h:mm:ss a')}
+                                                        </Row>
+                                                    </td>
+                                                    <td className="text-center">{task.taskOptions.duration}</td>
+                                                    <td>{this.state.taskStatusesMatching[task.status]}</td>
+                                                    <td>
+                                                        <Row>
+                                                            <Button color="primary" style={{ margin: 2 }}
+                                                                onClick={(evt) => {
+                                                                    evt.preventDefault();
+                                                                    this.setState({ createTask: true, selectedTask: task.taskId });
+                                                                }}>edit</Button>
+                                                            <Button color="danger" style={{ margin: 2 }}
+                                                                onClick={(evt) => {
+                                                                    evt.preventDefault();
+                                                                    this.setState({ openModalDeletingTask: true });
+                                                                }}>delete</Button>
+                                                        </Row>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                    </tbody>
+                                </Table>
                             </Row>
                             <Row>
                                 {!(this.state.listenerTasks.length === 0) && !this.state.loadingTasks && !!this.state.tasksCount && (

@@ -72,5 +72,45 @@ namespace TMS.NET06.TwitterListener.Manager.React.Data
 
             return taskStatusesMatching;
         }
+
+        public async Task<ListenerTask> GetListenerTasksAsync(int TaskId)
+        {
+            await using var context = CreateContext();
+            
+            ListenerTask listenerTask = context.ListenerTasks.Where(t => t.TaskId == TaskId).Single();
+
+            return listenerTask;
+        }
+
+        public async Task<bool> SaveListenerTasksAsync(ListenerTask listenerTask)
+        {
+            await using var context = CreateContext();
+
+            if(listenerTask.TaskId == 0)
+            {
+                context.ListenerTasks.Add(listenerTask);
+            }
+            else
+            {
+                var liveListenerTask = context.ListenerTasks
+                                              .Where(t => t.TaskId == listenerTask.TaskId)
+                                              .FirstOrDefault();
+
+                liveListenerTask.Name = listenerTask.Name;
+                liveListenerTask.TaskOptions.StartDate = listenerTask.TaskOptions.StartDate;
+                liveListenerTask.TaskOptions.EndDate = listenerTask.TaskOptions.EndDate;
+                liveListenerTask.TaskOptions.Duration = listenerTask.TaskOptions.Duration;
+                liveListenerTask.TaskOptions.CronSchedule = listenerTask.TaskOptions.CronSchedule;
+                liveListenerTask.ListenerOptions = new ListenerOptions()
+                {
+                    FilterRules = listenerTask.ListenerOptions.FilterRules.ToArray(),
+                    Mode = listenerTask.ListenerOptions.Mode
+                };
+            }
+
+            context.SaveChanges();
+
+            return true;
+        }
     }
 }

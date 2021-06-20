@@ -12,5 +12,7 @@ namespace TMS.NET06.TwitterListener.Manager.React.Data
         Task<IEnumerable<ListenerTask>> GetFilteredListenersTaskAsync(int currentPage, int taskPerPage, string searchText);
         Task<int> GetCountTasksAsync(string searchText);
         Task<Dictionary<int, string>> GetTaskStatusesMatching();
+        Task<ListenerTask> GetListenerTasksAsync(int TaskId);
+        Task<bool> SaveListenerTasksAsync(ListenerTask listenerTask);
     }
 }
