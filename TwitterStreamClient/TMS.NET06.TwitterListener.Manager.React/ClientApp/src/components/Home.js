@@ -153,7 +153,7 @@ export class Home extends Component {
                                                 <tr key={task.taskId}>
                                                     <th scope="row">{task.taskId}</th>
                                                     <td>{task.name}</td>
-                                                    <td className="col-sm-2">{task.listenerOptions.filterRules.length
+                                                    <td>{task.listenerOptions.filterRules.length
                                                         ? task.listenerOptions.filterRules.toString() : ''}</td>
                                                     <td>
                                                         <Row>

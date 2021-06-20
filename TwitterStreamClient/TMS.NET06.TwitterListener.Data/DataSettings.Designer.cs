@@ -28,9 +28,9 @@ namespace TMS.NET06.TwitterListener.Data {
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Server=.\\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActi" +
             "veResultSets=true")]
-        public string ListenerManagerConnection {
+        public string ListenerManagerConnection_old {
             get {
-                return ((string)(this["ListenerManagerConnection"]));
+                return ((string)(this["ListenerManagerConnection_old"]));
             }
         }
         
@@ -39,9 +39,20 @@ namespace TMS.NET06.TwitterListener.Data {
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLExpress;Initial Catalog=ListenerManager;Integrated Security=True" +
             "")]
-        public string ListenerManagerConnection_old {
+        public string ListenerManagerConnection_old1 {
             get {
-                return ((string)(this["ListenerManagerConnection_old"]));
+                return ((string)(this["ListenerManagerConnection_old1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:twitterlistenermanagerdbserver.database.windows.net,1433;Initial " +
+            "Catalog=TwitterListenerManager_db;User Id=listenermanageradmin@twitterlistenerma" +
+            "nagerdbserver;Password=q3bG58.DP")]
+        public string ListenerManagerConnection {
+            get {
+                return ((string)(this["ListenerManagerConnection"]));
             }
         }
     }

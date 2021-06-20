@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TMS.NET06.TwitterListener.Data" GeneratedClassName="DataSettings">
   <Profiles />
   <Settings>
-    <Setting Name="ListenerManagerConnection" Type="(Connection string)" Scope="Application">
+    <Setting Name="ListenerManagerConnection_old" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;ConnectionString&gt;Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true&lt;/ConnectionString&gt;
@@ -10,13 +10,16 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true</Value>
     </Setting>
-    <Setting Name="ListenerManagerConnection_old" Type="(Connection string)" Scope="Application">
+    <Setting Name="ListenerManagerConnection_old1" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;ConnectionString&gt;Data Source=.\SQLExpress;Initial Catalog=ListenerManager;Integrated Security=True&lt;/ConnectionString&gt;
   &lt;ProviderName /&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=.\SQLExpress;Initial Catalog=ListenerManager;Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="ListenerManagerConnection" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Data Source=tcp:twitterlistenermanagerdbserver.database.windows.net,1433;Initial Catalog=TwitterListenerManager_db;User Id=listenermanageradmin@twitterlistenermanagerdbserver;Password=q3bG58.DP</Value>
     </Setting>
   </Settings>
 </SettingsFile>
