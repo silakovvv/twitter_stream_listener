@@ -2,4 +2,6 @@
 <notes>
 	<add_migration>dotnet ef migrations add NameMigration --project ..\TMS.NET06.TwitterListener.Data -- Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true</add_migration>
 	<update_database>dotnet ef database update --context ListenerManagerContext -- Server=.\SQLExpress;Database=ListenerManager;Trusted_Connection=True;MultipleActiveResultSets=true</update_database>
+	<add_migration_pub>dotnet ef migrations add NameMigration --project ..\TMS.NET06.TwitterListener.Data -- Data Source=tcp:twitterlistenermanagerdbserver.database.windows.net,1433;Initial Catalog=TwitterListenerManager_db;User Id=listenermanageradmin@twitterlistenermanagerdbserver;Password=q3bG58.DP</add_migration_pub>
+	<update_database_pub>dotnet ef database update --context ListenerManagerContext -- Data Source=tcp:twitterlistenermanagerdbserver.database.windows.net,1433;Initial Catalog=TwitterListenerManager_db;User Id=listenermanageradmin@twitterlistenermanagerdbserver;Password=q3bG58.DP</update_database_pub>
 </notes>
